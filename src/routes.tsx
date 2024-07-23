@@ -24,11 +24,11 @@ export const router = createBrowserRouter([
         element: <AuthLayout />,
         children: [
             {
-                path: "/sing-in",
+                path: "/sign-in",
                 element: <SingIn />,
             },
             {
-                path: "/sing-up",
+                path: "/sign-up",
                 element: <SingUp />,
             },
         ]
