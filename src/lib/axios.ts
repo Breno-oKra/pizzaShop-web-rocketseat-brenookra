@@ -10,7 +10,7 @@ export const api = axios.create({
 /* esse codigo tambem serve para customizar dados da requisição, esse config é o retorno, o header,body*/
 if(env.VITE_ENABLE_API_DELAY){
     api.interceptors.request.use(async(config) => {
-        await new Promise(resolve => setTimeout(resolve,5000))
+        await new Promise(resolve => setTimeout(resolve,1000))
         return config
     })
 }
