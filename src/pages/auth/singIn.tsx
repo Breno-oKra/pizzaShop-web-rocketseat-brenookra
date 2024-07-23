@@ -24,8 +24,9 @@ export function SingIn() {
         mutationFn: singIn,
     })
     async function handleSingin(data: SinginForm) {
-        await authenticate({email:data.email})
+       
         try {
+            await authenticate({email:data.email})
             toast.success("Enviamos um link de autenticação para seu e-mail.", {
                 action: {
                     label: "Reenviar",
