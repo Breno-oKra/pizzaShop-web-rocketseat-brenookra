@@ -1,29 +1,37 @@
 import { Building, ChevronDown, LogOut } from "lucide-react";
 import { Button } from "./ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuTrigger, DropdownMenuItem, DropdownMenuSeparator } from "./ui/dropdown-menu";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { getProfile } from "@/api/get-profile";
 
 import { getManageRestaurant } from "@/api/get-managed-restaurants";
 import { Skeleton } from "./ui/skeleton";
 import { Dialog, DialogTrigger } from "./ui/dialog";
 import { StoreProfileDialog } from "./store-profile-dialog";
+import { signOut } from "@/api/sign-out";
+import { useNavigate } from "react-router-dom";
 
 export function AccountMenu() {
-
+    const navigate = useNavigate()
     const { data: profile, isLoading: isLoadingProfile } = useQuery({
         queryKey: ['profile'],
         queryFn: getProfile,
         staleTime: Infinity
     })
-    /* isLoading verifica se uma informação esta sendo carregada, assim não precisamos criar consts com verificações */
-    /* staleTime é usado para atualizar as informações em segundo para caso as informações tenham sido atualizado, mas passamos
-    Infinity para não ser carregado automaticamente e sim manualmente, somente quando pedirmos   
-    */
+
     const { data: managedRestaurant, isLoading: isLoadingManageRestaurant } = useQuery({
         queryKey: ['manager-restaurant'],
         queryFn: getManageRestaurant,
         staleTime: Infinity
+    })
+    const { mutateAsync: signOutFn, isPending: isSignOutPending } = useMutation({
+        mutationFn: signOut,
+        onSuccess: () => {
+            /* replace:true faz com que a rota seja substituida ao invez de manda-lo a uma nova
+                isso faz com que não possa voltar a rota antiga
+            */
+            navigate('/sign-in', { replace: true })
+        }
     })
     return (
         <Dialog>
@@ -54,12 +62,15 @@ export function AccountMenu() {
                             <span>Perfil da Loja</span>
                         </DropdownMenuItem>
                     </DialogTrigger>
-                    <DropdownMenuItem className="text-rose-500 dark:text-rose-400">
-                        <LogOut className="mr-2 h-4 w-4" />
-                        <span>Sair</span>
+                    <DropdownMenuItem asChild className="text-rose-500 dark:text-rose-400" disabled={isSignOutPending}>
+                        <button className="w-full" onClick={() => signOutFn()}>
+                            <LogOut className="mr-2 h-4 w-4" />
+                            <span>Sair</span>
+                        </button>
+                        
                     </DropdownMenuItem>
                 </DropdownMenuContent>
-                    <StoreProfileDialog/>
+                <StoreProfileDialog />
             </DropdownMenu>
 
         </Dialog>

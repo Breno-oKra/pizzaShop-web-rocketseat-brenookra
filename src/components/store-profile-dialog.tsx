@@ -32,7 +32,7 @@ export function StoreProfileDialog() {
             description: managedRestaurant?.description ?? ''
         }
     })
-  
+
     function updateManageRestaurantCache({ name, description }: StoreProfileSchemaType) {
         const cached = queryClient.getQueryData<GetManageRestaurantResponse>(['manager-restaurant'])
         if (cached) {
@@ -44,42 +44,19 @@ export function StoreProfileDialog() {
         }
         return {cached}
     }
-    /* agora usaremos onMutate que usar o metodo de interface otimista
-        ele atualiza a responsta instantaneamente, ex:
-        mudar o nome de breno para bel,
-        ele atualiza o nome para bel na interface mesmo que a api ainda não tenha retornado
-        que a mudança foi um sucesso no backend
-    */
     const { mutateAsync: updateProfileFn } = useMutation({
         mutationFn: updateProfile,
         onMutate({name,description}) {
-           /*  lembrando que o cached que retornando na função acima é as insformações antigas, antes das novas */
             const {cached} = updateManageRestaurantCache({name,description})
             return {previousProfile:cached}
         },
         onError(_,__,context) {
-           /*  aqui verificamos o error, se não conseguiu atualizar, ele vai mudar a informação em tela para a nova
-            mesmo dando erro, então capturamos o erro e verificamos as informações antigas e passamos para a função de atualizar,
-            assim vai continuar as informações antigas */
             if(context?.previousProfile){
                 updateManageRestaurantCache(context.previousProfile)
             }
         }
 
     })
-    /* const { mutateAsync: updateProfileFn } = useMutation({
-        mutationFn: updateProfile,
-        onSuccess(_, { name, description }) {
-            const cached = queryClient.getQueryData<GetManageRestaurantResponse>(['manager-restaurant'])
-            if (cached) {
-                queryClient.setQueryData<GetManageRestaurantResponse>(['manager-restaurant'], {
-                    ...cached,
-                    name,
-                    description,
-                })
-            }
-        },
-    }) */
     async function handleUpdatedProfile(data: StoreProfileSchemaType) {
         try {
             await updateProfileFn({
