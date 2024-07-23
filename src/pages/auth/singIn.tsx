@@ -5,22 +5,37 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { toast } from 'sonner'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
+import { useMutation } from '@tanstack/react-query'
+import { singIn } from '@/api/sing-in'
 const singInForm = z.object({
     email: z.string().email(),
 })
 type SinginForm = z.infer<typeof singInForm>
 export function SingIn() {
-    const { register, handleSubmit, formState: { isSubmitting } } = useForm<SinginForm>()
-
+    const [searchParams] = useSearchParams()
+    const { register, handleSubmit, formState: { isSubmitting } } = useForm<SinginForm>({
+        defaultValues:{
+            email:searchParams.get('email') ?? ""
+        }
+    })
+    /* mutateasync chama a função de autenticação singIn */
+    const {mutateAsync:authenticate} = useMutation({
+        mutationFn: singIn,
+    })
     async function handleSingin(data: SinginForm) {
-        await new Promise(resolve => setTimeout(resolve, 2000))
-        toast.success("Enviamos um link de autenticação para seu e-mail.", {
-            action: {
-                label: "Reenviar",
-                onClick: () => handleSingin(data)
-            }
-        })
+        await authenticate({email:data.email})
+        try {
+            toast.success("Enviamos um link de autenticação para seu e-mail.", {
+                action: {
+                    label: "Reenviar",
+                    onClick: () => handleSingin(data)
+                }
+            })
+        } catch {
+            toast.error("credenciais erradas")
+        }
+        
     }
     return (
         <>
@@ -28,7 +43,7 @@ export function SingIn() {
             <div className='p-8 '>
                 {/* podemos usar asChild para que Link receba a estilização do componente button do shadcn/ui */}
                 <Button variant="ghost" asChild className='absolute right-4 top-8'>
-                    <Link to="/sing-up" >
+                    <Link to="/sign-up" >
                         Novo Estabelecimento
                     </Link>
                 </Button>

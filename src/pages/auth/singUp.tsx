@@ -6,11 +6,13 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { toast } from 'sonner'
 import { Link, useNavigate } from 'react-router-dom'
+import { useMutation } from '@tanstack/react-query'
+import { RegisterRestaurant } from '@/api/register-restaurant'
 
 const singUpForm = z.object({
-    restaurantName:z.string(),
-    managerName:z.string(),
-    phone:z.string(),
+    restaurantName: z.string(),
+    managerName: z.string(),
+    phone: z.string(),
     email: z.string().email(),
 
 })
@@ -20,22 +22,34 @@ type SingUpForm = z.infer<typeof singUpForm>
 export function SingUp() {
     const { register, handleSubmit, formState: { isSubmitting } } = useForm<SingUpForm>()
     const navigate = useNavigate()
+    const { mutateAsync: registerRestaurantFn } = useMutation({
+        mutationFn: RegisterRestaurant,
+    })
     async function handleSingUp(data: SingUpForm) {
-        await new Promise(resolve => setTimeout(resolve, 2000))
-        toast.success("Restaurante Cadastrado com sucesso.", {
-            action: {
-                label: "Login",
-                onClick: () => navigate('/sing-in')
-            }
+        await registerRestaurantFn({ 
+            restaurantName:data.restaurantName,
+            managerName:data.managerName,
+            email:data.email,
+            phone:data.phone
         })
+        try {
+            toast.success("Restaurant cadastrado com sucesso", {
+                action: {
+                    label: "Login",
+                    onClick: () => navigate(`/sign-in?email=${data.email}`)
+                }
+            })
+        } catch {
+            toast.error("credenciais erradas")
+        }
     }
     return (
         <>
             <Helmet title='Cadastro' />
             <div className='p-8 '>
                 <Button variant="ghost" asChild className='absolute right-4 top-8'>
-                    <Link to="/sing-in" >
-                       Fazer Login
+                    <Link to="/sign-in" >
+                        Fazer Login
                     </Link>
                 </Button>
                 <div className='w-[350px] flex flex-col justify-center gap-6'>
@@ -74,7 +88,7 @@ export function SingUp() {
                         </div>
                         <Button disabled={isSubmitting} className='w-full' type="submit">Finalizar Cadastro</Button>
                         <p className='px-6 text-center text-sm leading-relaxed text-muted-foreground'>
-                            Ao se cadastrar, você concorda com nossos <a className='underline underline-offset-4' href="#">termos de serviço</a> e <a  className='underline underline-offset-4' href="#">políticas de privacidade</a>
+                            Ao se cadastrar, você concorda com nossos <a className='underline underline-offset-4' href="#">termos de serviço</a> e <a className='underline underline-offset-4' href="#">políticas de privacidade</a>
                         </p>
                     </form>
                 </div>
