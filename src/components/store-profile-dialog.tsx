@@ -1,10 +1,10 @@
-import { DialogContent, DialogFooter, DialogHeader, DialogTitle,DialogDescription, DialogClose  } from "./ui/dialog";
+import { DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogDescription, DialogClose } from "./ui/dialog";
 import { Button } from "./ui/button";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { getManageRestaurant } from "@/api/get-managed-restaurants";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { getManageRestaurant, GetManageRestaurantResponse } from "@/api/get-managed-restaurants";
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -17,6 +17,7 @@ const storeProfileSchema = z.object({
 })
 type StoreProfileSchemaType = z.infer<typeof storeProfileSchema>
 export function StoreProfileDialog() {
+    const queryClient = useQueryClient()
     const { data: managedRestaurant } = useQuery({
         queryKey: ['manager-restaurant'],
         queryFn: getManageRestaurant,
@@ -31,8 +32,24 @@ export function StoreProfileDialog() {
             description: managedRestaurant?.description ?? ''
         }
     })
+    /* fazendo a informação atualizar em uma requisição ja feita */
+    /* 
+        usamos onSuccess para passar as informações novas
+        depois usamos queryClient para pegar as informações ja existente e passamos a queryKey
+        depois setamos as novas informações passando tambem a queryKey correspondente
+    */
     const { mutateAsync: updateProfileFn } = useMutation({
-        mutationFn: updateProfile
+        mutationFn: updateProfile,
+        onSuccess(_, { name, description }) {
+            const cached = queryClient.getQueryData<GetManageRestaurantResponse>(['manager-restaurant'])
+            if (cached) {
+                queryClient.setQueryData<GetManageRestaurantResponse>(['manager-restaurant'], {
+                    ...cached,
+                    name,
+                    description,
+                })
+            }
+        },
     })
     async function handleUpdatedProfile(data: StoreProfileSchemaType) {
         try {
