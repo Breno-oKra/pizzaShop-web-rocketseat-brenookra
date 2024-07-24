@@ -6,6 +6,8 @@ import { MounthCanceledOrdersCard } from './mount-canceled-orders-amount'
 import { RevenueChart } from './revenue-chart'
 import { PopularProductsChart } from './popular-products-chart'
 export function Dashboard() {
+    //simular erro para gerar Page Error
+    /* throw new Error('errando no error, aplicação dando error, conserter o error') */
     return (
         <>
             <Helmet title='Dashboard' />
