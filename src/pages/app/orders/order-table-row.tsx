@@ -6,6 +6,7 @@ import { OrderDetails } from "./order-details";
 import { OrderStatus } from "@/components/order-status";
 import {formatDistanceToNow} from 'date-fns'
 import {ptBR} from 'date-fns/locale'
+import { useState } from "react";
 interface OrderTableRowProps{
     order:{
         orderId: string;
@@ -16,18 +17,21 @@ interface OrderTableRowProps{
     }
 }
 export function OrderTableRow({order}:OrderTableRowProps) {
+    //criamos isDetailOpen pois o Dialog executa o codigo mesmo sem estar aberto, então fazia requisições mesmo sem ser chamadas
+    // ja que o react-query atualiza os dados quando desfocamos da pagina e voltamos
+    const [isDetailsOpen,setDetailsOpen] = useState(false)
     return (
 
         <TableRow>
             <TableCell>
-                <Dialog>
+                <Dialog open={isDetailsOpen} onOpenChange={setDetailsOpen}>
                     <DialogTrigger asChild>
                         <Button variant="outline" size="xs" >
                             <Search className="h-3 w-3" />
                             <span className="sr-only">Detalhes do pedido</span>
                         </Button>
                     </DialogTrigger>
-                    <OrderDetails/>
+                    <OrderDetails open={isDetailsOpen} orderId={order.orderId}/>
                 </Dialog>
 
             </TableCell>
@@ -41,7 +45,7 @@ export function OrderTableRow({order}:OrderTableRowProps) {
             </TableCell>
             <TableCell className="font-medium">{order.customerName}</TableCell>
             <TableCell className="font-medium">
-                {order.total.toLocaleString('pt-BR',{
+                {(order.total / 100).toLocaleString('pt-BR',{
                     style:'currency',
                     currency:'BRL'
                 })}
