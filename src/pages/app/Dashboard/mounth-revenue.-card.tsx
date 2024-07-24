@@ -2,6 +2,7 @@ import { getMonthRevenue } from "@/api/get-mounth-revenue";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
 import { DollarSign } from "lucide-react";
+import { MetricCardSkeletom } from "./metric-card-skeleton";
 
 export function MounthRevenueCard() {
     const { data: mounthRevenue } = useQuery({
@@ -15,7 +16,7 @@ export function MounthRevenueCard() {
                 <DollarSign className='h-4 w-4 text-muted-foreground' />
             </CardHeader>
             <CardContent className='spacy-y-1'>
-                {mounthRevenue && (
+                {mounthRevenue ? (
                     <>
                         <span className='text-2xl font-bold tracking-tight'>{(mounthRevenue.receipt / 100).toLocaleString('pt-BR',{
                             style:'currency',
@@ -33,6 +34,8 @@ export function MounthRevenueCard() {
                             )}
                         </p>
                     </>
+                ): (
+                    <MetricCardSkeletom/>
                 )}
              
             </CardContent>
