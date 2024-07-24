@@ -2,6 +2,7 @@ import { getMounthCanceled } from "@/api/get-mounth-canceled-orders-amount";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
 import { DollarSign } from "lucide-react";
+import { MetricCardSkeletom } from "./metric-card-skeleton";
 export function MounthCanceledOrdersCard() {
     const { data: mounthCanceled } = useQuery({
         queryFn: getMounthCanceled,
@@ -14,7 +15,7 @@ export function MounthCanceledOrdersCard() {
                 <DollarSign className='h-4 w-4 text-muted-foreground' />
             </CardHeader>
             <CardContent className='spacy-y-1'>
-                {mounthCanceled && (
+                {mounthCanceled ? (
                     <>
                         <span className='text-2xl font-bold tracking-tight'>{mounthCanceled.amount.toLocaleString('pt-BR')}</span>
                         <p className='text-xs text-muted-foreground'>
@@ -29,8 +30,10 @@ export function MounthCanceledOrdersCard() {
                             )}
                         </p>
                     </>
+                ) : (
+                    <MetricCardSkeletom />
                 )}
-               
+
             </CardContent>
         </Card>
     )

@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { DatePickerWithRange } from "@/components/ui/date-range-picker";
 import { useQuery } from "@tanstack/react-query";
 import { subDays } from "date-fns";
+import { Loader2 } from "lucide-react";
 import {  useState } from "react";
 import { DateRange } from "react-day-picker";
 import { ResponsiveContainer, LineChart, XAxis, YAxis, CartesianGrid, Line, Tooltip, Label } from "recharts"
@@ -36,7 +37,7 @@ export function RevenueChart() {
             </CardHeader>
             <CardContent>
                 {
-                    dailyRevenueInPeriod && (
+                    dailyRevenueInPeriod ? (
                         <ResponsiveContainer width="100%" height={248}>
                             <LineChart data={dailyRevenueInPeriod} style={{ fontSize: 12 }}>
                                 <XAxis dataKey="date" tickLine={false} axisLine={false} dy={16} />
@@ -49,7 +50,11 @@ export function RevenueChart() {
                                 <Tooltip />
                             </LineChart>
                         </ResponsiveContainer>
-                    )
+                    ) : (
+                        <div className="flex h-[240px] w-full items-center justify-center">
+                          <Loader2 className="h-8 w-8 text-muted-foreground animate-spin"/>
+                        </div>
+                      )
                 }
             </CardContent>
         </Card>
