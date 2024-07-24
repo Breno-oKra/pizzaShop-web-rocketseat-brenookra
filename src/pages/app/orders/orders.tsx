@@ -11,23 +11,19 @@ import { z } from "zod";
 export function Orders() {
     const [searchParams,setSearchParams] = useSearchParams()
 
-    // z.coerce.number() - tenta converte algo em numero
-    // depois pegamos a page e diminuimos 1 porque
-    // no page - 1, fizemos isso porque iremos enviar a primeira pagina pela url como 1
-    // mas sabemos que em um array começa em 0 então na visualização sera 1 mas na função sera 0, por isso page -1
-    // se a page não for informada, então sera 1
-    // Math.max(page - 1,0) para garantir que o usuario coloque numero negativo no params
+    const orderId = searchParams.get('orderId')
+    const customerName = searchParams.get('customerName')
+    const status = searchParams.get('status')
+
     const pageIndex = z.coerce
     .number()
     .transform((page) => Math.max(page - 1,0))
     .parse(searchParams.get('page') ?? '1') 
 
-    //passamos o pageIndex como queryKey tambem pois a pagina depende dele para atualizar
-    //se não passarmos, as informações não vão atualizar ja que a queryKey é somente orders
-    // então o react-query não vai fazer outra requisição, ja com o pageIndex mudando, ele ira fazer
+    //lembrando que todo parametro deve esta no queryKey para que seja atualizado
     const {data:result} = useQuery({
-        queryKey:['orders',pageIndex],
-        queryFn:() => getOrders({pageIndex}),
+        queryKey:['orders',pageIndex,orderId,customerName,status],
+        queryFn:() => getOrders({pageIndex,orderId,customerName,status:status == 'all'? null : status}),
     })
     //usado para mudar o valor do params na url
     function handlePagination(pageIndex:number){
