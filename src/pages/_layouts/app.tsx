@@ -11,21 +11,23 @@ export function AppLayout() {
         const interceptorId = api.interceptors.response.use(
             response => response,
             error => {
-                if(isAxiosError(error)){
+                if (isAxiosError(error)) {
                     //respostas vindas do backend
                     const status = error.response?.status
                     const code = error.response?.data.code
-                    if(status == 401 && code === 'UNAUTHORIZED'){
-                        navigate("/sign-in",{replace:true})
+                    if (status == 401 && code === 'UNAUTHORIZED') {
+                        navigate("/sign-in", { replace: true })
+                    } else {
+                        throw error
                     }
                 }
             }
         )
         // isso aqui é feito para limpar
-        return () =>{
+        return () => {
             api.interceptors.response.eject(interceptorId)
         }
-    },[navigate])
+    }, [navigate])
     return (
         <div className="flex min-h-screen flex-col antialiased">
             <Header />
