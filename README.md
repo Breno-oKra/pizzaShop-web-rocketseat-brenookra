@@ -1,6 +1,6 @@
 <img src="https://reffect.co.jp/wp-content/uploads/2023/03/mocking_service_worker.png" height="150px" style="padding-inline:40%"/>
-<h2>Agora vamos usar o msw que nos retorna respostas ficticias para simular o backend </h2>
-<br/>
+
+## 🚀 Agora vamos usar o msw que nos retorna respostas ficticias para simular o backend
 
 ```bash
  npm install msw@latest --save-dev
@@ -30,3 +30,24 @@ iniciamos o vite, mudamos a port setamos o mode e nomeamos como test
 ```bash
  /main.tsx
 ```
+## ❗ antes de começar a utilizar, LEMBRE de rodar o codigo run correto ❗
+
+```bash
+ npm run dev:test
+```
+
+<p>Não esquecer de mudar algumas informações ja que não teremos o backend oficial</p>
+<p>crie um arquivo chamado .env.test, o nome o arquivo tem que ter o mesmo nome do ambiente que voce nomeou em: </p>
+
+```JSON
+ "dev:test": "vite --port 50789 --mode test"
+```
+<p>depois mude as informações que seriam as mesmas de .env.local</p>
+<p>agora nossa api referencia o / da nossa aplicação e retiramos o delay que simulava uma api lenta</p>
+
+```ts
+    VITE_API_URL="/"
+    VITE_ENABLE_API_DELAY=false
+```
+
+
