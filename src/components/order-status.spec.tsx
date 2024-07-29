@@ -5,11 +5,11 @@ describe('Order Status', () => {
     it('should display the right text when order status is pending', () => {
         const wrapper = render(<OrderStatus status="pending" />)
         // mostra todo o codigo do componente
-        wrapper.debug()
+        /* wrapper.debug() */
         //procura um texto no componente
         const findText = wrapper.getByText('Pendente')
 
-        //aqui pegamos um idTestId que foi adicionado no componente para podermos fazer testes
+        //aqui pegamos um idTestId que foi adicionado no componente para fazer testes
         const badgeElement = wrapper.getByTestId('badge')
         //isso retorna o html do que foi procurado
         console.log(badgeElement.outerHTML)
