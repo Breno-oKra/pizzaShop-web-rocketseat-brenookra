@@ -26,13 +26,14 @@ export function SingUp() {
         mutationFn: RegisterRestaurant,
     })
     async function handleSingUp(data: SingUpForm) {
-        await registerRestaurantFn({ 
-            restaurantName:data.restaurantName,
-            managerName:data.managerName,
-            email:data.email,
-            phone:data.phone
-        })
+
         try {
+            await registerRestaurantFn({
+                restaurantName: data.restaurantName,
+                managerName: data.managerName,
+                email: data.email,
+                phone: data.phone
+            })
             toast.success("Restaurant cadastrado com sucesso", {
                 action: {
                     label: "Login",
@@ -40,7 +41,7 @@ export function SingUp() {
                 }
             })
         } catch {
-            toast.error("credenciais erradas")
+            toast.error("Erro ao cadastrar restaurante")
         }
     }
     return (
@@ -66,7 +67,8 @@ export function SingUp() {
                             <Label htmlFor='restaurantName'>
                                 Nome do Estabelecimento
                             </Label>
-                            <Input id='text' type='restaurantName' {...register('restaurantName')} />
+
+                            <Input id='restaurantName' type='text' {...register('restaurantName')} />
                         </div>
                         <div className='space-y-2'>
                             <Label htmlFor='managerName'>
