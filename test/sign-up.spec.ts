@@ -13,7 +13,7 @@ test('sign up successfully', async ({ page }) => {
   const toast = page.getByText('Restaurant cadastrado com sucesso')
 
   expect(toast).toBeVisible()
-  await page.waitForTimeout(2000)
+  /* await page.waitForTimeout(2000) */
 })
 
 test('sign up with error', async ({ page }) => {
