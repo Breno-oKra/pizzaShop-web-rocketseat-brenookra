@@ -1,7 +1,7 @@
 import { api } from "@/lib/axios";
 
 
-interface approveOrderProps{
+export interface approveOrderProps{
     orderId:string
 }
 export async function approveOrder({orderId}:approveOrderProps){

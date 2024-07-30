@@ -1,6 +1,6 @@
 <img src="https://reffect.co.jp/wp-content/uploads/2023/03/mocking_service_worker.png" height="150px" style="padding-inline:40%"/>
 
-## 🚀 Aprendizado importante nesse commit
+## 🚀 Aprendizado importante commit anterior
 
 <p>pegar um type atravez de um objeto, referencia</p>
 
