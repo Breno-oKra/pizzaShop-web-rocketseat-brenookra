@@ -17,11 +17,12 @@ test('update profile successfully', async ({ page }) => {
 
     const toast = page.getByText('Perfil atualizado')
 
-    expect(toast).toBeVisible()
+    await expect(toast).toBeVisible()
 
     await page.getByRole('button', { name: 'Close' }).click()
 
-    await page.waitForTimeout(250)
-
-    expect(page.getByRole('button', { name: 'Breno Pizza' })).toBeVisible()
+    // await page.waitForTimeout(250)
+    //estava dando erro pois carregava muito rapido, então colocamos await page.waitForTimeout(250)
+    // mas como expect retorna uma promisse, se colocarmos await, ele vai ficar rodando ate passar
+    await expect(page.getByRole('button', { name: 'Breno Pizza' })).toBeVisible()
 })

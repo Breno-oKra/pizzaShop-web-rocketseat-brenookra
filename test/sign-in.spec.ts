@@ -14,7 +14,7 @@ test('sign in successfully', async ({ page }) => {
     'Enviamos um link de autenticação para seu e-mail',
   )
 
-  expect(toast).toBeVisible()
+  await expect(toast).toBeVisible()
 
   // aqui pedimos para esperar 2s depois que realizar tudo
   // pois o app da playwright esta com um bug e não mostra o final do test
@@ -30,7 +30,7 @@ test('sign in with wrong credentials', async ({ page }) => {
 
   const toast = page.getByText('credenciais erradas')
 
-  expect(toast).toBeVisible()
+  await expect(toast).toBeVisible()
 })
 //navegando para novo estabelecimento
 test('navigate to new restaurant page', async ({ page }) => {
@@ -38,6 +38,6 @@ test('navigate to new restaurant page', async ({ page }) => {
 
   await page.getByRole('link', { name: 'Novo estabelecimento' }).click()
 
-  expect(page.url()).toContain('/sign-up')
+  await expect(page.url()).toContain('/sign-up')
 })
 
