@@ -3,7 +3,11 @@ import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
   testDir: './test',
-
+  // pegando arquivos que estão com extenção diferente
+  // na aula usaram o final do arquivo como index.e2e-spec.ts
+  // agora vamos fazer o playwrigth acha-lo
+  // .*(o ponto é qualquer caracter, o * é quantas vezes for) o resto é a extenção e o $ diz que deve terminar com .e2e-spec\.ts
+  testMatch:/.*\.e2e-spec\.ts$/,
   fullyParallel: true,
 
   forbidOnly: !!process.env.CI,
