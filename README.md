@@ -1,8 +1,9 @@
 <div display="flex" align="center">
     <img width="100%" alt="" src="./public/photos/home.png"/>
 </div>
+
 - warning ! the api was develpement per rocketseat, repositori cloning per me
-- git backend : https://dt-money-rocketseat-brenookra.netlify.app
+- git backend : https://github.com/rocketseat-education/pizzashop-api
 
 ## 🚀 Projeto Finalizado 
 
