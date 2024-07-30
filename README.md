@@ -1,53 +1,54 @@
 <img src="https://reffect.co.jp/wp-content/uploads/2023/03/mocking_service_worker.png" height="150px" style="padding-inline:40%"/>
 
-## 🚀 Agora vamos usar o msw que nos retorna respostas ficticias para simular o backend
+## 🚀 Aprendizado importante nesse commit
+
+<p>pegar um type atravez de um objeto, referencia</p>
 
 ```bash
- npm install msw@latest --save-dev
+ /src/api/mocks/get-orders-mock.ts
 ```
-Podemos iniciar com
-```bash
- npx msw init <PUBLIC_DIR> [options]
-```
-exemplo, referencie a pasta public
-```bash
- npx msw init ./public
-```
-<p>começamos criando um arquivo que contem a função de inicialização do msw que esta em  </p>
+<p>aqui temos uma interface, e queremos tipa somente com o campo status </p>
 
-```bash
- /api/mocks/intex.ts
+```ts
+ export interface getOrdersType{
+    orders: {
+        orderId: string;
+        createdAt: string
+        status: "pending" | "canceled" | "processing" | "delivering" | "delivered";
+        customerName: string;
+        total: number;
+    }[];
+    meta: {
+        pageIndex: number;
+        perPage: number;
+        totalCount: number;
+    };
+}
 ```
-<p>depois criamos um MODE para lidarmos com o ambiente da aplicação no package.json</p>
+<p>agora pegamos somente o campo status</p>
 
-iniciamos o vite, mudamos a port setamos o mode e nomeamos como test
-
-```JSON
- "dev:test": "vite --port 50789 --mode test"
+```ts
+    //aqui pegamos somente o campo orders
+    type Orders = getOrdersType['orders']
+    //agora criamos um type que obtem somente o campo order, [number] para dizer que é qualquer posição
+    // do array e não uma fixa e pegamos o campo [status]
+    type OrderStatus = getOrdersType['orders'][number]['status']
 ```
-<p>depois mudamos a inicialização da aplicação no main.tsx para que se inicie conforme configurado</p>
+<p>pegando o params do request.url com facilidade</p>
 
-```bash
- /main.tsx
+```ts
+    //aqui criamos uma url ja que request.url vem como string, e teriamos de dar um split para pegarmos os  params
+    const { searchParams } = new URL(request.url)
+    // e agora podemos pergar muitas coisas da url ex:
+    const { searchParams,href,pathname } = new URL(request.url)
+    
 ```
+
+ 
 ## ❗ antes de começar a utilizar, LEMBRE de rodar o codigo run correto ❗
 
 ```bash
  npm run dev:test
-```
-
-<p>Não esquecer de mudar algumas informações ja que não teremos o backend oficial</p>
-<p>crie um arquivo chamado .env.test, o nome o arquivo tem que ter o mesmo nome do ambiente que voce nomeou em: </p>
-
-```JSON
- "dev:test": "vite --port 50789 --mode test"
-```
-<p>depois mude as informações que seriam as mesmas de .env.local</p>
-<p>agora nossa api referencia o / da nossa aplicação e retiramos o delay que simulava uma api lenta</p>
-
-```ts
-    VITE_API_URL="/"
-    VITE_ENABLE_API_DELAY=false
 ```
 
 

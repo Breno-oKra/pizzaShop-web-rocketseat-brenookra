@@ -12,6 +12,8 @@ import { getPopularProductsMock } from './get-popular-products'
 import { getProfileMock } from './get-profile-mock'
 import { updateProfileMock } from './update-profile-mock'
 import { getManagedRestaurantMock } from './get-managed-restaurant'
+import { getOrdersMock } from './get-orders-mock'
+import { getOrderDetailsMock } from './get-order-details-mock'
 
 //agora temos que chamar nossos mocks
 export const worker = setupWorker(
@@ -26,6 +28,8 @@ export const worker = setupWorker(
   getProfileMock,
   getManagedRestaurantMock,
   updateProfileMock,
+  getOrdersMock,
+  getOrderDetailsMock,
 )
 
 // o msw so vai se iniciar quando chamarmos essa função

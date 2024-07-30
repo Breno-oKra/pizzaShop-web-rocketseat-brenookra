@@ -1,9 +1,9 @@
 import { api } from "@/lib/axios";
 
-interface getOrderDetailsPROPS{
+export interface getOrderDetailsPROPS{
     orderId:string
 }
-interface getOrderDetailsResponse{
+export interface getOrderDetailsResponse{
     id: string;
     createdAt: string;
     status: "pending" | "canceled" | "processing" | "delivering" | "delivered";
